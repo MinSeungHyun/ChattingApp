@@ -1,17 +1,18 @@
 package com.seunghyun.firebasetest;
 
 class Item {
-    private String text;
+    private String id, chat;
 
-    public Item(String text) {
-        this.text = text;
+    Item(String id, String chat) {
+        this.id = id;
+        this.chat = chat;
     }
 
-    public String getText() {
-        return text;
+    String getId() {
+        return id;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    String getChat() {
+        return chat;
     }
 }

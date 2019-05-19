@@ -1,22 +1,34 @@
 package com.seunghyun.firebasetest;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editText;
-    private Button button;
+    private ImageView sendButton;
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private ArrayList<Item> items;
-    private int messageCount;
+
+    private String id, password;
+    private int chatCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,36 +39,69 @@ public class MainActivity extends AppCompatActivity {
         setUpRecyclerView(items);
 
 
-//        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//
-//        button.setOnClickListener(v -> {
-//            String text = editText.getText().toString().trim();
-//            if (text.length() > 0) {
-//                reference.child("message").child("asdf").push().setValue(text);
-//            }
-//            editText.setText("");
-//        });
-//
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Object value = dataSnapshot.getValue(Object.class);
-//                items.add(new Item(value.toString()));
-//                adapter.notifyDataSetChanged();
-//                recyclerView.scrollToPosition(items.size() - 1);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        reference.child("chat").child("id-count").child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chatCount = Integer.parseInt(Objects.requireNonNull(dataSnapshot.getValue()).toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        sendButton.setOnClickListener(v -> {
+            String text = editText.getText().toString().trim();
+            if (text.length() > 0) {
+                reference.child("chat").child("chatting").child(id + "-" + chatCount).setValue(text);
+            }
+            reference.child("chat").child("id-count").child(id).setValue(chatCount + 1);
+            editText.setText("");
+        });
+
+        reference.child("chat").child("chatting").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String key = dataSnapshot.getKey();
+                String[] splitKey = Objects.requireNonNull(key).split("-");
+                String name = splitKey[0];
+                String value = dataSnapshot.getValue(String.class);
+                items.add(new Item(name + " : ", value));
+                adapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(items.size() - 1);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void init() {
         editText = findViewById(R.id.edit_text);
-        button = findViewById(R.id.button);
+        sendButton = findViewById(R.id.send_button);
         recyclerView = findViewById(R.id.recycler_view);
+        id = getIntent().getStringExtra("id");
+        password = getIntent().getStringExtra("password");
     }
 
     private void setUpRecyclerView(ArrayList<Item> items) {

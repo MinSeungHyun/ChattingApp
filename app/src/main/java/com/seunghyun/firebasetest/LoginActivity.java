@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, R.string.require_password, Toast.LENGTH_LONG).show();
             else if (passwordLength > 16 || passwordLength < 4)
                 Toast.makeText(LoginActivity.this, R.string.password_length, Toast.LENGTH_LONG).show();
+            else if(name.contains("-")) Toast.makeText(LoginActivity.this, R.string.char_warning, Toast.LENGTH_LONG).show();
             else {
                 addIdToDB(name, password);
                 progressBar.setVisibility(View.VISIBLE);
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void addIdToDB(String id, String password) {
+    private void addIdToDB(final String id, final String password) {
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child("id-password").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -94,10 +95,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (dataSnapshot.getValue() == null) {
                     //가입
                     reference.child("id-password").child(id).setValue(password);
-                    login();
+                    reference.child("chat").child("id-count").child(id).setValue(0);
+                    login(id, password);
                 } else {
                     //로그인
-                    if (dataSnapshot.getValue().toString().equals(password)) login();
+                    if (dataSnapshot.getValue().toString().equals(password)) login(id, password);
                     else
                         Toast.makeText(LoginActivity.this, getString(R.string.exist_name), Toast.LENGTH_SHORT).show();
                 }
@@ -111,8 +113,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void login() {
+    private void login(String id, String password) {
         final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("password", password);
         startActivity(intent);
         finish();
     }
