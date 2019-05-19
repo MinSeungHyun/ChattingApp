@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
-    DatabaseReference reference;
+    private DatabaseReference reference;
     private EditText editText;
     private ImageView sendButton;
     private RecyclerView recyclerView;
