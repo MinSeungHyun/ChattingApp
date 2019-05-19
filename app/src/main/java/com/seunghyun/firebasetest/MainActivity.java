@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private ArrayList<Item> items;
+    private TextView announcementTV;
 
     private String id;
     private int chatCount;
@@ -100,12 +102,26 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        reference.child("announcement").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String text = getString(R.string.announcement) + dataSnapshot.getValue(String.class);
+                announcementTV.setText(text);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void init() {
         editText = findViewById(R.id.edit_text);
         sendButton = findViewById(R.id.send_button);
         recyclerView = findViewById(R.id.recycler_view);
+        announcementTV = findViewById(R.id.announcement_text);
         id = getIntent().getStringExtra("id");
     }
 

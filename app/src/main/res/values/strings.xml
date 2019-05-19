@@ -15,4 +15,5 @@
     <string name="char_warning">\'-\'는 사용할 수 없는 문자입니다.</string>
     <string name="excess_text">100자를 초과할 수 없습니다.</string>
     <string name="deleted_by_admin">관리자에 의해 채팅이 삭제되었습니다.</string>
+    <string name="announcement">공지사항 :" "</string>
 </resources>

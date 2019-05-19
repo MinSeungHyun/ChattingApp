@@ -6,6 +6,16 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextView
+        android:background="@color/colorPrimary"
+        android:id="@+id/announcement_text"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/announcement"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
