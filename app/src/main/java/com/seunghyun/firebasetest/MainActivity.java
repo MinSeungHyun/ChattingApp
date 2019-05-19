@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -190,10 +192,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         announcementTV = findViewById(R.id.announcement_text);
         onlineTV = findViewById(R.id.online_text);
+        LinearLayout container = findViewById(R.id.container);
         id = getIntent().getStringExtra("id");
 
         reference = FirebaseDatabase.getInstance().getReference();
         loginList = new ArrayList<>();
+
+        container.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> recyclerView.scrollToPosition(items.size() - 1));
     }
 
     private void setUpRecyclerView(ArrayList<Item> items) {
