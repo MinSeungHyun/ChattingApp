@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -55,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(v -> {
             String text = editText.getText().toString().trim();
-            if (text.length() > 0) {
+            if (text.length() > 100) {
+                Toast.makeText(MainActivity.this, getString(R.string.excess_text), Toast.LENGTH_LONG).show();
+            } else if (text.length() > 0) {
                 reference.child("chat").child("chatting").child(id + "-" + chatCount).setValue(text);
+                reference.child("chat").child("id-count").child(id).setValue(chatCount + 1);
+                editText.setText("");
             }
-            reference.child("chat").child("id-count").child(id).setValue(chatCount + 1);
-            editText.setText("");
         });
 
         reference.child("chat").child("chatting").addChildEventListener(new ChildEventListener() {
