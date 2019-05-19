@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        reference.child("chat").child("login-ids").child(id).setValue(getCurrentTime());
+        login();
     }
 
     @Override
@@ -165,8 +165,14 @@ public class MainActivity extends AppCompatActivity {
         logout();
     }
 
+    private void login() {
+        reference.child("chat").child("login-ids").child(id).setValue(getCurrentTime());
+        reference.child("chat").child("chatting").child(getCurrentTime() + "-System").setValue(id + getString(R.string.logged_in));
+    }
+
     private void logout() {
         reference.child("chat").child("login-ids").child(id).removeValue();
+        reference.child("chat").child("chatting").child(getCurrentTime() + "-System").setValue(id + getString(R.string.logged_out));
     }
 
     private String getCurrentTime() {

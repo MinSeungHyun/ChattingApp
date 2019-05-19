@@ -1,6 +1,5 @@
 package com.seunghyun.firebasetest;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,11 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
-import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
@@ -63,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, R.string.password_length, Toast.LENGTH_LONG).show();
             else if (name.contains("-"))
                 Toast.makeText(LoginActivity.this, R.string.char_warning, Toast.LENGTH_LONG).show();
+            else if (Pattern.compile(Pattern.quote("system"), Pattern.CASE_INSENSITIVE).matcher(name).find())
+                Toast.makeText(LoginActivity.this, R.string.char_system_warning, Toast.LENGTH_LONG).show();
             else {
                 addIdToDB(name, password);
                 progressBar.setVisibility(View.VISIBLE);
