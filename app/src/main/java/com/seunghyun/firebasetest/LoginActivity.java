@@ -1,6 +1,7 @@
 package com.seunghyun.firebasetest;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -27,11 +28,19 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText nameEditText, passwordEditText;
     ProgressBar progressBar;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         init();
+
+        String savedId = sharedPreferences.getString("id", "");
+        String savedPassword = sharedPreferences.getString("password", "");
+        if (!Objects.equals(savedId, "")) nameEditText.setText(savedId);
+        if (!Objects.equals(savedPassword, "")) passwordEditText.setText(savedPassword);
 
         loginButton.setOnClickListener(v -> {
             String name = Objects.requireNonNull(nameEditText.getText()).toString();
@@ -97,10 +106,10 @@ public class LoginActivity extends AppCompatActivity {
                     //가입
                     reference.child("id-password").child(id).setValue(password);
                     reference.child("chat").child("id-count").child(id).setValue(0);
-                    login(id);
+                    login(id, password);
                 } else {
                     //로그인
-                    if (dataSnapshot.getValue().toString().equals(password)) login(id);
+                    if (dataSnapshot.getValue().toString().equals(password)) login(id, password);
                     else
                         Toast.makeText(LoginActivity.this, getString(R.string.exist_name), Toast.LENGTH_SHORT).show();
                 }
@@ -114,7 +123,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void login(String id) {
+    private void login(String id, String password) {
+        editor = sharedPreferences.edit();
+        editor.putString("id", id);
+        editor.putString("password", password);
+        editor.apply();
+
         final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("id", id);
         startActivity(intent);
@@ -128,5 +142,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordLayout = findViewById(R.id.password_layout);
         passwordEditText = findViewById(R.id.password_editText);
         progressBar = findViewById(R.id.progressBar);
+        sharedPreferences = getSharedPreferences("app_setting", MODE_PRIVATE);
     }
 }
