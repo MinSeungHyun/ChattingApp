@@ -27,13 +27,13 @@ public class LoginActivity extends AppCompatActivity {
             int nameLength = Objects.requireNonNull(nameEditText.getText()).toString().length();
             int passwordLength = Objects.requireNonNull(passwordEditText.getText()).toString().length();
             if (nameLength < 1)
-                Toast.makeText(LoginActivity.this, "닉네임을 입력해주세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, R.string.require_name, Toast.LENGTH_LONG).show();
             else if (nameLength > 10)
-                Toast.makeText(LoginActivity.this, "닉네임은 10자 이하여야 됩니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, R.string.name_length, Toast.LENGTH_LONG).show();
             else if (passwordLength < 1)
-                Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, R.string.require_password, Toast.LENGTH_LONG).show();
             else if (passwordLength > 16 || passwordLength < 4)
-                Toast.makeText(LoginActivity.this, "비밀번호는 4자 이상, 16자 이하여야 됩니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, R.string.password_length, Toast.LENGTH_LONG).show();
             else {
                 final Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count > 10) nameLayout.setError("닉네임은 10자 이하여야 됩니다.");
+                if (count > 10) nameLayout.setError(getString(R.string.name_length));
                 else nameLayout.setError("");
 
             }
@@ -67,7 +67,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count > 16 || count < 4) passwordLayout.setError("비밀번호는 4자 이상, 16자 이하여야 됩니다.");
+                if (count > 16 || count < 4)
+                    passwordLayout.setError(getString(R.string.password_length));
                 else passwordLayout.setError("");
             }
 
