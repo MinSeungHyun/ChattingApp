@@ -30,6 +30,8 @@
             android:id="@+id/online_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="end"
             android:text="@string/online"
             android:textColor="@android:color/black" />
