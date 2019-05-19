@@ -14,8 +14,8 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     Button loginButton;
-    TextInputLayout textInputLayout;
-    TextInputEditText textInputEditText;
+    TextInputLayout nameLayout, passwordLayout;
+    TextInputEditText nameEditText, passwordEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,18 +24,24 @@ public class LoginActivity extends AppCompatActivity {
         init();
 
         loginButton.setOnClickListener(v -> {
-            int nameLength = Objects.requireNonNull(textInputEditText.getText()).toString().length();
+            int nameLength = Objects.requireNonNull(nameEditText.getText()).toString().length();
+            int passwordLength = Objects.requireNonNull(passwordEditText.getText()).toString().length();
             if (nameLength < 1)
                 Toast.makeText(LoginActivity.this, "닉네임을 입력해주세요.", Toast.LENGTH_LONG).show();
             else if (nameLength > 10)
                 Toast.makeText(LoginActivity.this, "닉네임은 10자 이하여야 됩니다.", Toast.LENGTH_LONG).show();
+            else if (passwordLength < 1)
+                Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show();
+            else if (passwordLength > 16 || passwordLength < 4)
+                Toast.makeText(LoginActivity.this, "비밀번호는 4자 이상, 16자 이하여야 됩니다.", Toast.LENGTH_LONG).show();
             else {
                 final Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
-        textInputEditText.addTextChangedListener(new TextWatcher() {
+
+        nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -43,11 +49,26 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count > 10) {
-                    textInputLayout.setError("닉네임은 10자 이하여야 됩니다.");
-                } else {
-                    textInputLayout.setError("");
-                }
+                if (count > 10) nameLayout.setError("닉네임은 10자 이하여야 됩니다.");
+                else nameLayout.setError("");
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count > 16 || count < 4) passwordLayout.setError("비밀번호는 4자 이상, 16자 이하여야 됩니다.");
+                else passwordLayout.setError("");
             }
 
             @Override
@@ -59,7 +80,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void init() {
         loginButton = findViewById(R.id.login_button);
-        textInputLayout = findViewById(R.id.text_input_layout);
-        textInputEditText = findViewById(R.id.text_input_edit_text);
+        nameLayout = findViewById(R.id.name_layout);
+        nameEditText = findViewById(R.id.name_editText);
+        passwordLayout = findViewById(R.id.password_layout);
+        passwordEditText = findViewById(R.id.password_editText);
     }
 }

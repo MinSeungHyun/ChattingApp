@@ -1,27 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".LoginActivity">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_input_layout"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="디미고 채팅앱에 오신 것을 환영합니다!\n\n처음이라면 사용할 닉네임과 비밀번호를, 로그인한 적이 있다면 사용하던 닉네임과 비밀번호를 입력해주세요!"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/name_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         app:counterEnabled="true"
         app:counterMaxLength="10"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toTopOf="@id/password_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/text_input_edit_text"
+            android:id="@+id/name_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="닉네임"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:counterEnabled="true"
+        app:counterMaxLength="16"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name_layout">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/password_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="비밀번호"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -29,8 +65,10 @@
         android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:backgroundTint="@color/colorPrimary"
         android:text="로그인"
-        android:textColor="@android:color/black" />
-</LinearLayout>
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>
