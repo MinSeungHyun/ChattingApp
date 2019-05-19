@@ -1,5 +1,6 @@
 package com.seunghyun.firebasetest;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,8 +20,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editText;
@@ -62,7 +67,13 @@ public class MainActivity extends AppCompatActivity {
             if (text.length() > 100) {
                 Toast.makeText(MainActivity.this, getString(R.string.excess_text), Toast.LENGTH_LONG).show();
             } else if (text.length() > 0) {
-                reference.child("chat").child("chatting").child(id + "-" + chatCount).setValue(text);
+                TimeZone time;
+                Date date = new Date();
+                @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
+                time = TimeZone.getTimeZone("Asia/Seoul");
+                df.setTimeZone(time);
+
+                reference.child("chat").child("chatting").child(df.format(date) + "-" + id + "-" + chatCount).setValue(text);
                 reference.child("chat").child("id-count").child(id).setValue(chatCount + 1);
                 editText.setText("");
             }
@@ -73,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String key = dataSnapshot.getKey();
                 String[] splitKey = Objects.requireNonNull(key).split("-");
-                String name = splitKey[0];
+                String name = splitKey[1];
                 String value = dataSnapshot.getValue(String.class);
                 items.add(new Item(name + " : ", value));
                 adapter.notifyDataSetChanged();
