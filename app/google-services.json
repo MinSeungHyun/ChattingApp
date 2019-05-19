@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1089221054045",
+    "firebase_url": "https://seunghyun-test.firebaseio.com",
+    "project_id": "seunghyun-test",
+    "storage_bucket": "seunghyun-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089221054045:android:7da2c62994f62028",
+        "android_client_info": {
+          "package_name": "com.seunghyun.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1089221054045-j7d2m2qu0jp88eepc2obmcr13n3g2qh3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seunghyun.firebasetest",
+            "certificate_hash": "5be46238dfce5a862b2fabb4853eb45d963732fe"
+          }
+        },
+        {
+          "client_id": "1089221054045-l0r18acfl1ccbtsfllv3uhid8jp49l22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIOqW3jyJRinTykNcd226tmuFDef629SU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089221054045-l0r18acfl1ccbtsfllv3uhid8jp49l22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
