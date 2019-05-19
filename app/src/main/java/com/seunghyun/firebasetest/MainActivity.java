@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -86,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
                 String[] splitKey = Objects.requireNonNull(key).split("-");
                 String name = splitKey[1];
                 String value = dataSnapshot.getValue(String.class);
-                items.add(new Item(name + " : ", value));
+                String[] splitTime = splitKey[0].split(":");
+                String time = splitTime[3] + ":" + splitTime[4];
+                items.add(new Item(name + " : ", value, time));
                 adapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(items.size() - 1);
             }

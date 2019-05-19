@@ -28,6 +28,7 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
         Item item = items.get(position);
         viewHolder.idTV.setText(item.getId());
         viewHolder.chatTV.setText(item.getChat());
+        viewHolder.timeTV.setText(item.getTime());
     }
 
     @Override
@@ -36,12 +37,13 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView idTV, chatTV;
+        TextView idTV, chatTV, timeTV;
 
         ViewHolder(View itemView) {
             super(itemView);
             idTV = itemView.findViewById(R.id.id_tv);
             chatTV = itemView.findViewById(R.id.chat_tv);
+            timeTV = itemView.findViewById(R.id.time_tv);
         }
     }
 }
