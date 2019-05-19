@@ -40,13 +40,14 @@ public class LoginActivity extends AppCompatActivity {
             int passwordLength = Objects.requireNonNull(passwordEditText.getText()).toString().length();
             if (nameLength < 1)
                 Toast.makeText(LoginActivity.this, R.string.require_name, Toast.LENGTH_LONG).show();
-            else if (nameLength > 10)
+            else if (nameLength > 10 || nameLength < 2)
                 Toast.makeText(LoginActivity.this, R.string.name_length, Toast.LENGTH_LONG).show();
             else if (passwordLength < 1)
                 Toast.makeText(LoginActivity.this, R.string.require_password, Toast.LENGTH_LONG).show();
             else if (passwordLength > 16 || passwordLength < 4)
                 Toast.makeText(LoginActivity.this, R.string.password_length, Toast.LENGTH_LONG).show();
-            else if(name.contains("-")) Toast.makeText(LoginActivity.this, R.string.char_warning, Toast.LENGTH_LONG).show();
+            else if (name.contains("-"))
+                Toast.makeText(LoginActivity.this, R.string.char_warning, Toast.LENGTH_LONG).show();
             else {
                 addIdToDB(name, password);
                 progressBar.setVisibility(View.VISIBLE);
