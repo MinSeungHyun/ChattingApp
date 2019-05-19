@@ -28,15 +28,22 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
+    DatabaseReference reference;
     private EditText editText;
     private ImageView sendButton;
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private ArrayList<Item> items;
-    private TextView announcementTV;
-
+    private TextView announcementTV, onlineTV;
     private String id;
     private int chatCount;
+    private ArrayList<String> loginList;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        reference.child("chat").child("login-ids").child(id).setValue(getCurrentTime());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
         init();
         items = new ArrayList<>();
         setUpRecyclerView(items);
-
-
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         reference.child("chat").child("id-count").child(id).addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,13 +71,7 @@ public class MainActivity extends AppCompatActivity {
             if (text.length() > 100) {
                 Toast.makeText(MainActivity.this, getString(R.string.excess_text), Toast.LENGTH_LONG).show();
             } else if (text.length() > 0) {
-                TimeZone time;
-                Date date = new Date();
-                @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
-                time = TimeZone.getTimeZone("Asia/Seoul");
-                df.setTimeZone(time);
-
-                reference.child("chat").child("chatting").child(df.format(date) + "-" + id + "-" + chatCount).setValue(text);
+                reference.child("chat").child("chatting").child(getCurrentTime() + "-" + id + "-" + chatCount).setValue(text);
                 reference.child("chat").child("id-count").child(id).setValue(chatCount + 1);
                 editText.setText("");
             }
@@ -126,6 +124,58 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        reference.child("chat").child("login-ids").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String name = dataSnapshot.getKey();
+                if (!loginList.contains(name)) loginList.add(name);
+                String text = loginList.size() + getString(R.string.online);
+                onlineTV.setText(text);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String name = dataSnapshot.getKey();
+                loginList.remove(name);
+                String text = loginList.size() + getString(R.string.online);
+                onlineTV.setText(text);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        logout();
+    }
+
+    private void logout() {
+        reference.child("chat").child("login-ids").child(id).removeValue();
+    }
+
+    private String getCurrentTime() {
+        TimeZone time;
+        Date date = new Date();
+        @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
+        time = TimeZone.getTimeZone("Asia/Seoul");
+        df.setTimeZone(time);
+        return df.format(date);
     }
 
     private void init() {
@@ -133,7 +183,11 @@ public class MainActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.send_button);
         recyclerView = findViewById(R.id.recycler_view);
         announcementTV = findViewById(R.id.announcement_text);
+        onlineTV = findViewById(R.id.online_text);
         id = getIntent().getStringExtra("id");
+
+        reference = FirebaseDatabase.getInstance().getReference();
+        loginList = new ArrayList<>();
     }
 
     private void setUpRecyclerView(ArrayList<Item> items) {

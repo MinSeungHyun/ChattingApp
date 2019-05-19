@@ -1,5 +1,6 @@
 package com.seunghyun.firebasetest;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,16 +21,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class LoginActivity extends AppCompatActivity {
-    Button loginButton;
-    TextInputLayout nameLayout, passwordLayout;
-    TextInputEditText nameEditText, passwordEditText;
-    ProgressBar progressBar;
+    private Button loginButton;
+    private TextInputLayout nameLayout, passwordLayout;
+    private TextInputEditText nameEditText, passwordEditText;
+    private ProgressBar progressBar;
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
+
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +104,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void addIdToDB(final String id, final String password) {
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child("id-password").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -124,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String id, String password) {
-        editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("id", id);
         editor.putString("password", password);
         editor.apply();
@@ -143,5 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password_editText);
         progressBar = findViewById(R.id.progressBar);
         sharedPreferences = getSharedPreferences("app_setting", MODE_PRIVATE);
+
+        reference = FirebaseDatabase.getInstance().getReference();
     }
 }
