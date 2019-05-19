@@ -8,5 +8,5 @@
     <string name="require_password">비밀번호를 입력해주세요.</string>
     <string name="name_length">닉네임은 10자 이하여야 됩니다.</string>
     <string name="password_length">비밀번호는 4자 이상, 16자 이하여야 됩니다.</string>
-    <string name="exist_name">이미 존재하는 닉네임입니다.</string>
+    <string name="exist_name">이미 존재하는 닉네임이거나 비밀번호가 일치하지 않습니다.</string>
 </resources>

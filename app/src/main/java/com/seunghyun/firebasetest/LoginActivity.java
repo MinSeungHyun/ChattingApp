@@ -92,12 +92,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null) {
+                    //가입
                     reference.child("id-password").child(id).setValue(password);
-                    final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    login();
                 } else {
-                    Toast.makeText(LoginActivity.this, getString(R.string.exist_name), Toast.LENGTH_SHORT).show();
+                    //로그인
+                    if (dataSnapshot.getValue().toString().equals(password)) login();
+                    else
+                        Toast.makeText(LoginActivity.this, getString(R.string.exist_name), Toast.LENGTH_SHORT).show();
                 }
                 progressBar.setVisibility(View.GONE);
             }
@@ -107,6 +109,12 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void login() {
+        final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void init() {
