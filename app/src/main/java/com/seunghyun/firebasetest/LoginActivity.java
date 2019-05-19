@@ -2,6 +2,7 @@ package com.seunghyun.firebasetest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +11,11 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
@@ -40,9 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             else if (passwordLength > 16 || passwordLength < 4)
                 Toast.makeText(LoginActivity.this, R.string.password_length, Toast.LENGTH_LONG).show();
             else {
-                final Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                addIdToDB(name, password);
             }
         });
 
@@ -76,6 +78,28 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private void addIdToDB(String id, String password) {
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("id-password").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) {
+                    reference.child("id-password").child(id).setValue(password);
+                    final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, getString(R.string.exist_name), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
