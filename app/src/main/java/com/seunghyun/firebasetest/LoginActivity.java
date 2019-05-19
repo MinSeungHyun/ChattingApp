@@ -8,7 +8,9 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton;
     TextInputLayout nameLayout, passwordLayout;
     TextInputEditText nameEditText, passwordEditText;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, R.string.password_length, Toast.LENGTH_LONG).show();
             else {
                 addIdToDB(name, password);
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
 
@@ -95,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(LoginActivity.this, getString(R.string.exist_name), Toast.LENGTH_SHORT).show();
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -110,5 +115,6 @@ public class LoginActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.name_editText);
         passwordLayout = findViewById(R.id.password_layout);
         passwordEditText = findViewById(R.id.password_editText);
+        progressBar = findViewById(R.id.progressBar);
     }
 }
