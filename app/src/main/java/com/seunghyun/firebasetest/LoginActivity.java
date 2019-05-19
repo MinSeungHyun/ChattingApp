@@ -10,6 +10,9 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -24,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
         init();
 
         loginButton.setOnClickListener(v -> {
+            String name = Objects.requireNonNull(nameEditText.getText()).toString();
+            String password = Objects.requireNonNull(passwordEditText.getText()).toString();
             int nameLength = Objects.requireNonNull(nameEditText.getText()).toString().length();
             int passwordLength = Objects.requireNonNull(passwordEditText.getText()).toString().length();
             if (nameLength < 1)
@@ -51,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (count > 10) nameLayout.setError(getString(R.string.name_length));
                 else nameLayout.setError("");
-
             }
 
             @Override
@@ -62,19 +66,16 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count > 16 || count < 4)
-                    passwordLayout.setError(getString(R.string.password_length));
+                if (count > 16) passwordLayout.setError(getString(R.string.password_length));
                 else passwordLayout.setError("");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
