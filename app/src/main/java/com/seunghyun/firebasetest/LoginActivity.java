@@ -96,10 +96,10 @@ public class LoginActivity extends AppCompatActivity {
                     //가입
                     reference.child("id-password").child(id).setValue(password);
                     reference.child("chat").child("id-count").child(id).setValue(0);
-                    login(id, password);
+                    login(id);
                 } else {
                     //로그인
-                    if (dataSnapshot.getValue().toString().equals(password)) login(id, password);
+                    if (dataSnapshot.getValue().toString().equals(password)) login(id);
                     else
                         Toast.makeText(LoginActivity.this, getString(R.string.exist_name), Toast.LENGTH_SHORT).show();
                 }
@@ -113,10 +113,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void login(String id, String password) {
+    private void login(String id) {
         final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("id", id);
-        intent.putExtra("password", password);
         startActivity(intent);
         finish();
     }

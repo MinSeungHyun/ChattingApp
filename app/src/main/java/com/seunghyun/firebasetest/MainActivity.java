@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private CustomAdapter adapter;
     private ArrayList<Item> items;
 
-    private String id, password;
+    private String id;
     private int chatCount;
 
     @Override
@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.send_button);
         recyclerView = findViewById(R.id.recycler_view);
         id = getIntent().getStringExtra("id");
-        password = getIntent().getStringExtra("password");
     }
 
     private void setUpRecyclerView(ArrayList<Item> items) {
