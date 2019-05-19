@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
         reference.child("chat").child("id-count").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                chatCount = Integer.parseInt(Objects.requireNonNull(dataSnapshot.getValue()).toString());
+                if (dataSnapshot.getValue() != null)
+                    chatCount = Integer.parseInt(dataSnapshot.getValue().toString());
             }
 
             @Override
@@ -84,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                items.clear();
+                adapter.notifyDataSetChanged();
+                Toast.makeText(MainActivity.this, R.string.deleted_by_admin, Toast.LENGTH_LONG).show();
             }
 
             @Override
