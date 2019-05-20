@@ -208,7 +208,10 @@ public class MainActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference();
         loginList = new ArrayList<>();
 
-        container.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> recyclerView.scrollToPosition(items.size() - 1));
+        container.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottom != oldBottom)
+                recyclerView.scrollToPosition(items.size() - 1);
+        });
     }
 
     private void setUpRecyclerView(ArrayList<Item> items) {
